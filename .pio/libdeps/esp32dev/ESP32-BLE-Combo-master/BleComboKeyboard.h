@@ -18,6 +18,8 @@ const uint8_t KEY_RIGHT_SHIFT = 0x85;
 const uint8_t KEY_RIGHT_ALT = 0x86;
 const uint8_t KEY_RIGHT_GUI = 0x87;
 
+const uint8_t SPACE_BAR = 0x20;
+
 const uint8_t KEY_UP_ARROW = 0xDA;
 const uint8_t KEY_DOWN_ARROW = 0xD9;
 const uint8_t KEY_LEFT_ARROW = 0xD8;

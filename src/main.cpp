@@ -23,7 +23,8 @@ int result=0;
 
 int u=0;
 int u_sum=0;
-//int sum_array=00000;
+
+bool variant=0;
 
 int count=0;
 
@@ -45,6 +46,7 @@ int read_sens(uint8_t pin)
   return(u);
 }
 
+
 int summ_arr(bool x[5])
 {
   return tach_stat[0]*10000+tach_stat[1]*1000+tach_stat[2]*100+tach_stat[3]*10+tach_stat[4]*1;  
@@ -63,6 +65,57 @@ void sort(int x[5])
       tach_stat[i]=0;
     }    
   }           
+}
+
+
+void firs_stag()
+{
+  switch (result)
+  {
+  case 1:
+    Mouse.click(MOUSE_RIGHT);
+    break;
+  case 10:
+    Mouse.move(10,0,0,0);
+    break;  
+  case 100:
+    Mouse.move(-10,0,0,0);
+    break; 
+  case 1000:
+    Mouse.move(0,10,0,0);
+    break;
+  case 10000:
+    Mouse.move(0,-10,0,0);
+    break;    
+  default:
+    break;
+  }
+
+}
+
+void tow_stag()
+{
+  switch (result)
+  {
+  case 1:
+    Keyboard.write(SPACE_BAR);
+    break;
+  case 10:
+    Keyboard.write(0x73);
+    break;  
+  case 100:
+    Keyboard.write(0x64);
+    break; 
+  case 1000:
+    Keyboard.write(0x77);
+    break;
+  case 10000:
+    Keyboard.write(0x61);
+    break;    
+  default:
+    break;
+  }
+  
 }
 
 void setup() 
@@ -98,28 +151,19 @@ void Task1code( void * pvParameters )
 
   result = summ_arr(tach_stat); 
 
-  switch (result)
+  if (result==11111)
   {
-  case 1:
-    Mouse.click(MOUSE_RIGHT);
-    break;
-  case 10:
-    Mouse.move(10,0,0,0);
-    break;  
-  case 100:
-    Mouse.move(-10,0,0,0);
-    break; 
-  case 1000:
-    Mouse.move(0,10,0,0);
-    break;
-  case 10000:
-    Mouse.move(0,-10,0,0);
-    break;    
-  default:
-    break;
+    variant=!variant;
   }
-
-  Serial.println(result);
+  
+  if (variant==1)
+  {
+    tow_stag();    
+  }
+  else
+  {
+    firs_stag();    
+  }   
   
   delay(50);  
   }
@@ -129,7 +173,7 @@ void Task2code( void * pvParameters )
 {
   while (1)
   {
-    //Serial.println(xPortGetCoreID());
+    Serial.println(variant);    
     delay(1000); 
   }
   
