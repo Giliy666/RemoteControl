@@ -50,19 +50,19 @@ int summ_arr(bool x[5])
   return tach_stat[0]*10000+tach_stat[1]*1000+tach_stat[2]*100+tach_stat[3]*10+tach_stat[4]*1;  
 }
 
-int sort(int x[5])
+void sort(int x[5])
 {        
-    for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 5; i++)
+  {
+    if (tach[i]<threshold)
     {
-      if (tach[i]<threshold)
-      {
-        tach_stat[i]=1;
-      }
-      else
-      {
-        tach_stat[i]=0;
-      }    
-    }           
+      tach_stat[i]=1;
+    }
+    else
+    {
+      tach_stat[i]=0;
+    }    
+  }           
 }
 
 void setup() 
