@@ -2,6 +2,11 @@
 #include <FreeRTOS.h>
 #include <BleCombo.h>
 #include <WiFi.h>
+#include <BLEHIDDevice.h>
+
+BLEHIDDevice* hid;
+BLECharacteristic* input;
+BLECharacteristic* output;
 
 #define BAT_PIN  33
 
@@ -47,7 +52,7 @@ int read_sens(uint8_t pin)
 }
 
 
-int summ_arr(bool x[5])
+int summ_arr(bool  x[5])
 {
   return tach_stat[0]*10000+tach_stat[1]*1000+tach_stat[2]*100+tach_stat[3]*10+tach_stat[4]*1;  
 }
@@ -73,7 +78,7 @@ void firs_stag()
   switch (result)
   {
   case 1:
-    Mouse.click(MOUSE_RIGHT);
+    Mouse.click(MOUSE_LEFT);
     break;
   case 10:
     Mouse.move(10,0,0,0);
@@ -101,16 +106,16 @@ void tow_stag()
     Keyboard.write(SPACE_BAR);
     break;
   case 10:
-    Keyboard.write(0x73);
+    Keyboard.write(0x61);
     break;  
   case 100:
-    Keyboard.write(0x64);
+    Keyboard.print("d");
     break; 
   case 1000:
-    Keyboard.write(0x77);
+    Keyboard.print("w");
     break;
   case 10000:
-    Keyboard.write(0x61);
+    Keyboard.print("s");
     break;    
   default:
     break;
@@ -122,12 +127,11 @@ void setup()
 {
 Serial.begin(115200);
 Serial.println("Starting BLE work!");
-
+pinMode(2,OUTPUT);
 xTaskCreatePinnedToCore(Task1code, "Task1", 10000, NULL, 1, NULL,  0); 
-  delay(500); 
+  delay(5); 
 xTaskCreatePinnedToCore(Task2code, "Task2", 10000, NULL, 1, NULL,  1); 
-  delay(500); 
-
+  delay(5); 
 Keyboard.begin();
 Mouse.begin();
 }
@@ -154,18 +158,17 @@ void Task1code( void * pvParameters )
   if (result==11111)
   {
     variant=!variant;
-  }
+  }  
+  if (variant==0)
+    {
+      tow_stag();    
+    }
+    else
+    {
+      firs_stag();    
+    }   
   
-  if (variant==1)
-  {
-    tow_stag();    
-  }
-  else
-  {
-    firs_stag();    
-  }   
-  
-  delay(50);  
+  delay(4);
   }
   
 }
@@ -173,8 +176,9 @@ void Task2code( void * pvParameters )
 {
   while (1)
   {
-    Serial.println(variant);    
-    delay(1000); 
+     
+    
+    delay(5000);
   }
   
 }
