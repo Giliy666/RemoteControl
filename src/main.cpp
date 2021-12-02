@@ -13,19 +13,17 @@ int bat_proc =50;
 #define TOUTCH_PIN4 T7
 #define TOUTCH_PIN_CLICK T8
 
-int touch_value_click = 0;
-
 int threshold = 30;
 
-bool tach_stat [4]={0,0,0,0};
-int tach [4]={0,0,0,0};
+bool tach_stat [5]={0,0,0,0,0};
+int tach [5]={0,0,0,0,0};
 
-bool work_mouse=0;
-bool work_key=0;
-int a=0;
+int result=0;
+
+
 int u=0;
 int u_sum=0;
-int sum_array=00000;
+//int sum_array=00000;
 
 int count=0;
 
@@ -47,10 +45,24 @@ int read_sens(uint8_t pin)
   return(u);
 }
 
-void sort()
+int summ_arr(bool x[5])
 {
-  
-  
+  return tach_stat[0]*10000+tach_stat[1]*1000+tach_stat[2]*100+tach_stat[3]*10+tach_stat[4]*1;  
+}
+
+int sort(int x[5])
+{        
+    for (int i = 0; i < 5; i++)
+    {
+      if (tach[i]<threshold)
+      {
+        tach_stat[i]=1;
+      }
+      else
+      {
+        tach_stat[i]=0;
+      }    
+    }           
 }
 
 void setup() 
@@ -69,7 +81,7 @@ Mouse.begin();
 
 void loop() 
 {
-  
+
 }
 
 void Task1code( void * pvParameters )
@@ -80,16 +92,36 @@ void Task1code( void * pvParameters )
   tach[1]=read_sens(TOUTCH_PIN2);
   tach[2]=read_sens(TOUTCH_PIN3);
   tach[3]=read_sens(TOUTCH_PIN4);
+  tach[4]=read_sens(TOUTCH_PIN_CLICK);
 
-  touch_value_click=read_sens(TOUTCH_PIN_CLICK);
+  sort(tach);
 
-     if (tach[0]<threshold)
+  result = summ_arr(tach_stat); 
+
+  switch (result)
   {
-    Keyboard.println("Hello");
-    delay(5);
+  case 1:
+    Mouse.click(MOUSE_RIGHT);
+    break;
+  case 10:
+    Mouse.move(10,0,0,0);
+    break;  
+  case 100:
+    Mouse.move(-10,0,0,0);
+    break; 
+  case 1000:
+    Mouse.move(0,10,0,0);
+    break;
+  case 10000:
+    Mouse.move(0,-10,0,0);
+    break;    
+  default:
+    break;
   }
-  delay(10);
+
+  Serial.println(result);
   
+  delay(50);  
   }
   
 }
@@ -97,9 +129,8 @@ void Task2code( void * pvParameters )
 {
   while (1)
   {
-    Serial.println(xPortGetCoreID());
-    delay(1000);
- 
+    //Serial.println(xPortGetCoreID());
+    delay(1000); 
   }
   
 }
