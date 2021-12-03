@@ -2,11 +2,7 @@
 #include <FreeRTOS.h>
 #include <BleCombo.h>
 #include <WiFi.h>
-#include <BLEHIDDevice.h>
-
-BLEHIDDevice* hid;
-BLECharacteristic* input;
-BLECharacteristic* output;
+#include <DNSServer.h>
 
 #define BAT_PIN  33
 
@@ -17,6 +13,11 @@ int bat_proc =50;
 #define TOUTCH_PIN3 T6
 #define TOUTCH_PIN4 T7
 #define TOUTCH_PIN_CLICK T8
+
+
+const char* ssid = "Giliy666";
+const char* password = "3216789q";
+
 
 int threshold = 30;
 
@@ -38,6 +39,8 @@ TaskHandle_t Task2;
 
 void Task1code( void * pvParameters );
 void Task2code( void * pvParameters );
+
+
 
 int read_sens(uint8_t pin)
 {
@@ -127,13 +130,30 @@ void setup()
 {
 Serial.begin(115200);
 Serial.println("Starting BLE work!");
+
 pinMode(2,OUTPUT);
+
+
 xTaskCreatePinnedToCore(Task1code, "Task1", 10000, NULL, 1, NULL,  0); 
   delay(5); 
 xTaskCreatePinnedToCore(Task2code, "Task2", 10000, NULL, 1, NULL,  1); 
   delay(5); 
+
 Keyboard.begin();
 Mouse.begin();
+
+WiFi.begin(ssid, password);
+
+  // Проверяем статус. Если нет соединения, то выводим сообщение о подключении
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Соединяемся к WiFi-сети...");
+  }
+
+  Serial.println("Есть подключение к WiFi-сети");
+
+
+
 }
 
 void loop() 
@@ -152,23 +172,24 @@ void Task1code( void * pvParameters )
   tach[4]=read_sens(TOUTCH_PIN_CLICK);
 
   sort(tach);
-
   result = summ_arr(tach_stat); 
 
   if (result==11111)
   {
     variant=!variant;
   }  
-  if (variant==0)
+  if (variant==1)
     {
-      tow_stag();    
+      tow_stag();
+      digitalWrite(2,1);    
     }
     else
     {
-      firs_stag();    
+      firs_stag();
+      digitalWrite(2,0);     
     }   
   
-  delay(4);
+  delay(10);
   }
   
 }
@@ -176,9 +197,8 @@ void Task2code( void * pvParameters )
 {
   while (1)
   {
-     
     
-    delay(5000);
   }
   
+     
 }
