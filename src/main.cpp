@@ -78,7 +78,7 @@ void sort(int x[5]) //сортировка по порогу
 }
 
 
-void firs_stag() // первый набор
+void firs_stag() // первый набор (формируется из табоицы ascii + некоторые функции из библиотеки BleCombo)
 {
   switch (result)
   {
@@ -103,7 +103,7 @@ void firs_stag() // первый набор
 
 }
 
-void tow_stag() // второй набор 
+void tow_stag() // второй набор (формируется из табоицы ascii + некоторые функции из библиотеки BleCombo)
 {
   switch (result)
   {
