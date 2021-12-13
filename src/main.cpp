@@ -4,10 +4,12 @@
 #include <WiFi.h>
 #include <DNSServer.h>
 
-#define BAT_PIN  33
+#define BAT_PIN  33 // чтение заряда
 
-int bat_proc =50;
+int bat_proc =50; // заряд
 
+
+// сенсорные пады для управления
 #define TOUTCH_PIN1 T4
 #define TOUTCH_PIN2 T5
 #define TOUTCH_PIN3 T6
@@ -19,10 +21,10 @@ const char* ssid = "Giliy666";
 const char* password = "3216789q";
 
 
-int threshold = 30;
+int threshold = 30; // порог сенсоров
 
-bool tach_stat [5]={0,0,0,0,0};
-int tach [5]={0,0,0,0,0};
+bool tach_stat [5]={0,0,0,0,0}; 
+int tach [5]={0,0,0,0,0}; // масив отслеживания нажатия
 
 int result=0;
 
@@ -55,12 +57,12 @@ int read_sens(uint8_t pin)
 }
 
 
-int summ_arr(bool  x[5])
+int summ_arr(bool x[5]) //преобразование в "двоичный" массив
 {
   return tach_stat[0]*10000+tach_stat[1]*1000+tach_stat[2]*100+tach_stat[3]*10+tach_stat[4]*1;  
 }
 
-void sort(int x[5])
+void sort(int x[5]) //сортировка по порогу
 {        
   for (int i = 0; i < 5; i++)
   {
@@ -76,7 +78,7 @@ void sort(int x[5])
 }
 
 
-void firs_stag()
+void firs_stag() // первый набор
 {
   switch (result)
   {
@@ -101,12 +103,13 @@ void firs_stag()
 
 }
 
-void tow_stag()
+void tow_stag() // второй набор 
 {
   switch (result)
   {
   case 1:
     Keyboard.write(SPACE_BAR);
+    delay(100);
     break;
   case 10:
     Keyboard.write(0x61);
@@ -133,15 +136,17 @@ Serial.println("Starting BLE work!");
 
 pinMode(2,OUTPUT);
 
-
+// инцыализируем 2 ядра
 xTaskCreatePinnedToCore(Task1code, "Task1", 10000, NULL, 1, NULL,  0); 
   delay(5); 
 xTaskCreatePinnedToCore(Task2code, "Task2", 10000, NULL, 1, NULL,  1); 
   delay(5); 
 
+// запуск мыши и клавы
 Keyboard.begin();
 Mouse.begin();
 
+//Wi-Fi ????
 WiFi.begin(ssid, password);
 
   // Проверяем статус. Если нет соединения, то выводим сообщение о подключении
@@ -165,6 +170,7 @@ void Task1code( void * pvParameters )
 {
   while (1)
   {
+  //считываем нажатие  
   tach[0]=read_sens(TOUTCH_PIN1);
   tach[1]=read_sens(TOUTCH_PIN2);
   tach[2]=read_sens(TOUTCH_PIN3);
@@ -174,26 +180,37 @@ void Task1code( void * pvParameters )
   sort(tach);
   result = summ_arr(tach_stat); 
 
-  if (result==11111)
+  if (result>0)
   {
-    variant=!variant;
-  }  
-  if (variant==1)
-    {
-      tow_stag();
-      digitalWrite(2,1);    
-    }
-    else
-    {
-      firs_stag();
-      digitalWrite(2,0);     
-    }   
-  
-  delay(10);
+      if (result==11111)
+      {
+        variant=!variant;
+      }  
+      if (variant==1)
+        {
+          firs_stag();
+          //tow_stag();
+          digitalWrite(2,1);    
+        }
+        else
+        {
+          //firs_stag();
+          tow_stag();
+          digitalWrite(2,0);     
+        }   
+      
+      delay(10);
+  }
+  else
+  {
+    delay (100);
   }
   
+  } 
+  
+  
 }
-void Task2code( void * pvParameters )
+void Task2code( void * pvParameters ) //web интерфейс
 {
   while (1)
   {
