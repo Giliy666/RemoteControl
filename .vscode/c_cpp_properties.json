@@ -8,11 +8,11 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "D:/GitRepo/RemoteControl/include",
-                "D:/GitRepo/RemoteControl/src",
+                "d:/GitRepo/RemoteControl/include",
+                "d:/GitRepo/RemoteControl/src",
                 "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/libraries/DNSServer/src",
                 "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
-                "D:/GitRepo/RemoteControl/.pio/libdeps/esp32dev/ESP32-BLE-Combo-master",
+                "d:/GitRepo/RemoteControl/.pio/libdeps/esp32dev/ESP32-BLE-Combo-master",
                 "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src",
                 "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/config",
                 "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/app_trace",
@@ -108,11 +108,11 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "D:/GitRepo/RemoteControl/include",
-                    "D:/GitRepo/RemoteControl/src",
+                    "d:/GitRepo/RemoteControl/include",
+                    "d:/GitRepo/RemoteControl/src",
                     "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/libraries/DNSServer/src",
                     "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
-                    "D:/GitRepo/RemoteControl/.pio/libdeps/esp32dev/ESP32-BLE-Combo-master",
+                    "d:/GitRepo/RemoteControl/.pio/libdeps/esp32dev/ESP32-BLE-Combo-master",
                     "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src",
                     "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/config",
                     "C:/Users/gilit/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/app_trace",
@@ -207,7 +207,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=50203",
+                "PLATFORMIO=50204",
                 "ARDUINO_ESP32_DEV",
                 "ESP32",
                 "ESP_PLATFORM",
